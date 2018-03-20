@@ -68,7 +68,13 @@ defaults._set('global', {
 				if (label) {
 					label += ': ';
 				}
-				label += tooltipItem.yLabel;
+				//	float-bar support, if y arguments are array tooltip will show bottom and up values
+				var Yvalue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+				if (helpers.isArray(Yvalue)) {
+					label += Yvalue[0] + ' - ' + Yvalue[1];
+				} else {
+					label += tooltipItem.yLabel;
+				}
 				return label;
 			},
 			labelColor: function(tooltipItem, chart) {
@@ -99,8 +105,8 @@ defaults._set('global', {
 module.exports = function(Chart) {
 
 	/**
- 	 * Helper method to merge the opacity into a color
- 	 */
+	 * Helper method to merge the opacity into a color
+	 */
 	function mergeOpacity(colorString, opacity) {
 		var color = helpers.color(colorString);
 		return color.alpha(opacity * color.alpha()).rgbaString();
